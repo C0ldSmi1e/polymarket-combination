@@ -5,6 +5,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { createCombo, updateCombo } from "@/src/actions/client/combos";
+import { Card, CardContent } from "@/src/components/ui/card";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
+import { Textarea } from "@/src/components/ui/textarea";
+import { Label } from "@/src/components/ui/label";
+import { Plus, X, Loader2 } from "lucide-react";
 
 const Form = ({ combo }: { combo?: ComboWithEvents }) => {
   const router = useRouter();
@@ -70,115 +76,115 @@ const Form = ({ combo }: { combo?: ComboWithEvents }) => {
   };
 
   return (
-    <form onSubmit={onSubmit} className="max-w-md">
-      <div className="mb-4">
-        <label htmlFor="name" className="block mb-1">
-          Name *
-        </label>
-        <input
-          id="name"
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          maxLength={100}
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-      </div>
+    <form onSubmit={onSubmit} className="space-y-6">
+      <Card>
+        <CardContent className="p-4 space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="name">Name *</Label>
+            <Input
+              id="name"
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              maxLength={100}
+              placeholder="Enter combo name"
+            />
+          </div>
 
-      <div className="mb-4">
-        <label htmlFor="description" className="block mb-1">
-          Description
-        </label>
-        <textarea
-          id="description"
-          value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
-          maxLength={500}
-          rows={4}
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={formData.isActive}
-            onChange={(e) =>
-              setFormData({ ...formData, isActive: e.target.checked })
-            }
-          />
-          Active
-        </label>
-      </div>
-
-      <div className="mb-4">
-        <label className="block mb-1">Event Slugs</label>
-        <div className="flex gap-2 mb-2">
-          <input
-            type="text"
-            value={newSlug}
-            onChange={(e) => setNewSlug(e.target.value)}
-            placeholder="Enter event slug"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                addEventSlug();
+          <div className="space-y-1.5">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
               }
-            }}
-            className="flex-1 p-2 border border-gray-300 rounded"
-          />
-          <button
-            type="button"
-            onClick={addEventSlug}
-            className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
-          >
-            Add
-          </button>
-        </div>
-        {formData.eventSlugs.length > 0 && (
-          <ul className="space-y-1">
-            {formData.eventSlugs.map((slug) => (
-              <li
-                key={slug}
-                className="flex justify-between items-center p-2 border border-gray-200 rounded"
-              >
-                <span>{slug}</span>
-                <button
-                  type="button"
-                  onClick={() => removeEventSlug(slug)}
-                  className="px-2 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
+              maxLength={500}
+              rows={3}
+              placeholder="Enter description (optional)"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isActive"
+              checked={formData.isActive}
+              onChange={(e) =>
+                setFormData({ ...formData, isActive: e.target.checked })
+              }
+              className="h-4 w-4 rounded border-neutral-300"
+            />
+            <Label htmlFor="isActive" className="font-normal">
+              Active
+            </Label>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="p-4 space-y-4">
+          <div className="space-y-1.5">
+            <Label>Event Slugs</Label>
+            <div className="flex gap-2">
+              <Input
+                type="text"
+                value={newSlug}
+                onChange={(e) => setNewSlug(e.target.value)}
+                placeholder="Enter Polymarket event slug"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addEventSlug();
+                  }
+                }}
+              />
+              <Button type="button" variant="outline" onClick={addEventSlug}>
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            <p className="text-xs text-neutral-500">
+              Enter the event slug from the Polymarket URL
+            </p>
+          </div>
+
+          {formData.eventSlugs.length > 0 && (
+            <ul className="space-y-2">
+              {formData.eventSlugs.map((slug) => (
+                <li
+                  key={slug}
+                  className="flex items-center justify-between gap-2 p-2 rounded-md bg-neutral-50 text-sm"
                 >
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+                  <span className="truncate">{slug}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeEventSlug(slug)}
+                    className="h-7 w-7 p-0 text-neutral-500 hover:text-red-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
 
       <div className="flex gap-2">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`px-4 py-2 text-white rounded ${
-            isSubmitting
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
           {isSubmitting ? "Saving..." : combo ? "Update" : "Create"}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="outline"
           onClick={onCancel}
           disabled={isSubmitting}
-          className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 disabled:cursor-not-allowed"
         >
           Cancel
-        </button>
+        </Button>
       </div>
     </form>
   );

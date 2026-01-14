@@ -5,14 +5,16 @@ import { useQueries } from "@tanstack/react-query";
 import { ComboWithEvents } from "@/src/schemas/combo";
 import { getEventBySlug } from "@/src/actions/client/polymarket";
 import { Event } from "@/src/schemas/polymarket";
+import { Card, CardContent } from "@/src/components/ui/card";
+import { Badge } from "@/src/components/ui/badge";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 const ComboItem = ({ combo }: { combo: ComboWithEvents }) => {
-  // Fetch events for all event slugs in parallel
   const eventQueries = useQueries({
     queries: combo.eventSlugs.map((slug) => ({
       queryKey: ["event", slug],
       queryFn: () => getEventBySlug(slug),
-      staleTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: 1000 * 60 * 5,
     })),
   });
 
@@ -22,39 +24,60 @@ const ComboItem = ({ combo }: { combo: ComboWithEvents }) => {
     .map((q) => q.data as Event);
 
   return (
-    <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
-      <div className="mb-3">
-        <Link href={`/combos/${combo.id}`} className="hover:underline">
-          <h3 className="font-semibold">{combo.name}</h3>
-        </Link>
-        {combo.description && (
-          <p className="mt-1 text-gray-600 text-sm">{combo.description}</p>
-        )}
-      </div>
+    <Card className="hover:border-neutral-300 transition-colors">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <Link href={`/combos/${combo.id}`} className="group">
+              <h3 className="font-medium group-hover:text-neutral-600 transition-colors">
+                {combo.name}
+              </h3>
+            </Link>
+            {combo.description && (
+              <p className="mt-1 text-sm text-neutral-500 line-clamp-2">
+                {combo.description}
+              </p>
+            )}
 
-      <div className="mb-3">
-        <strong className="text-sm">Events ({combo.eventSlugs.length}):</strong>
+            <div className="mt-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline">
+                  {combo.eventSlugs.length} event{combo.eventSlugs.length !== 1 ? "s" : ""}
+                </Badge>
+              </div>
 
-        {isLoading ? (
-          <p className="text-sm text-gray-600">Loading...</p>
-        ) : events.length > 0 ? (
-          <ul className="mt-1 text-sm text-gray-700">
-            {events.map((event) => (
-              <li key={event.id}>• {event.title || event.slug}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-sm text-gray-600">No events found.</p>
-        )}
-      </div>
+              {isLoading ? (
+                <div className="flex items-center text-sm text-neutral-400">
+                  <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                  Loading events...
+                </div>
+              ) : events.length > 0 ? (
+                <ul className="text-sm text-neutral-600 space-y-0.5">
+                  {events.slice(0, 3).map((event) => (
+                    <li key={event.id} className="truncate">
+                      {event.title || event.slug}
+                    </li>
+                  ))}
+                  {events.length > 3 && (
+                    <li className="text-neutral-400">
+                      +{events.length - 3} more
+                    </li>
+                  )}
+                </ul>
+              ) : null}
+            </div>
+          </div>
 
-      <Link
-        href={`/combos/${combo.id}`}
-        className="text-sm text-blue-600 hover:underline"
-      >
-        View Details →
-      </Link>
-    </div>
+          <Link
+            href={`/combos/${combo.id}`}
+            className="flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700 transition-colors shrink-0"
+          >
+            View
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
