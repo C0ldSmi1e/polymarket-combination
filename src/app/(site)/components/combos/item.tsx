@@ -2,23 +2,23 @@
 
 import { useQueries } from "@tanstack/react-query";
 import { ComboWithEvents } from "@/src/schemas/combo";
-import { getMarketsByEventSlug } from "@/src/actions/client/polymarket";
-import { Market } from "@/src/schemas/polymarket";
+import { getEventBySlug } from "@/src/actions/client/polymarket";
+import { Event, Market } from "@/src/schemas/polymarket";
 
 const ComboItem = ({ combo }: { combo: ComboWithEvents }) => {
-  // Fetch markets for all event slugs in parallel
-  const marketQueries = useQueries({
+  // Fetch events for all event slugs in parallel
+  const eventQueries = useQueries({
     queries: combo.eventSlugs.map((slug) => ({
-      queryKey: ["markets", slug],
-      queryFn: () => getMarketsByEventSlug(slug),
+      queryKey: ["event", slug],
+      queryFn: () => getEventBySlug(slug),
       staleTime: 1000 * 60 * 5, // 5 minutes
     })),
   });
 
-  const isLoading = marketQueries.some((q) => q.isLoading);
-  const allMarkets = marketQueries
+  const isLoading = eventQueries.some((q) => q.isLoading);
+  const events = eventQueries
     .filter((q) => q.data)
-    .flatMap((q) => q.data as Market[]);
+    .map((q) => q.data as Event);
 
   return (
     <div
@@ -40,28 +40,54 @@ const ComboItem = ({ combo }: { combo: ComboWithEvents }) => {
 
       <div>
         <strong style={{ fontSize: 14 }}>
-          Markets ({combo.eventSlugs.length} events):
+          Events ({combo.eventSlugs.length}):
         </strong>
 
         {isLoading ? (
-          <p style={{ fontSize: 14, color: "#666" }}>Loading markets...</p>
-        ) : allMarkets.length > 0 ? (
+          <p style={{ fontSize: 14, color: "#666" }}>Loading events...</p>
+        ) : events.length > 0 ? (
           <div
             style={{
               marginTop: 8,
               display: "flex",
               flexDirection: "column",
-              gap: 8,
+              gap: 12,
             }}
           >
-            {allMarkets.map((market) => (
-              <MarketCard key={market.id} market={market} />
+            {events.map((event) => (
+              <EventCard key={event.id} event={event} />
             ))}
           </div>
         ) : (
-          <p style={{ fontSize: 14, color: "#666" }}>No markets found.</p>
+          <p style={{ fontSize: 14, color: "#666" }}>No events found.</p>
         )}
       </div>
+    </div>
+  );
+};
+
+const EventCard = ({ event }: { event: Event }) => {
+  return (
+    <div
+      style={{
+        padding: 12,
+        border: "1px solid #ddd",
+        borderRadius: 4,
+        background: "white",
+      }}
+    >
+      <div style={{ fontWeight: 500, marginBottom: 8 }}>
+        {event.title || event.slug}
+      </div>
+      {event.markets.length > 0 ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {event.markets.map((market) => (
+            <MarketCard key={market.id} market={market} />
+          ))}
+        </div>
+      ) : (
+        <p style={{ fontSize: 14, color: "#666", margin: 0 }}>No markets</p>
+      )}
     </div>
   );
 };
