@@ -5,8 +5,7 @@ import nextTypescript from "eslint-config-next/typescript";
 const eslintConfig = [
   {
     ignores: [
-      "components/ui/*",
-      "lib/utils.ts"
+      "src/components/ui/*",
     ],
   },
   ...nextConfig,

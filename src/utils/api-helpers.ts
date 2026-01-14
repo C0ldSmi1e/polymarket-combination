@@ -9,7 +9,7 @@ const createSuccessResponse = <T>(data: T): StandardResponse<T> => {
     data,
     error: null,
   };
-}
+};
 
 /**
  * Creates an error response with the provided error code and message
@@ -20,6 +20,6 @@ const createErrorResponse = (errorMessage: string): StandardResponse<null> => {
     data: null,
     error: errorMessage,
   };
-}
+};
 
 export { createSuccessResponse, createErrorResponse };

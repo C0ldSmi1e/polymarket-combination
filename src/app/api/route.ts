@@ -1,7 +1,7 @@
 import { createSuccessResponse, createErrorResponse } from "@/src/utils/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
 
-const GET = async (request: NextRequest): Promise<NextResponse> => {
+const GET = async (_request: NextRequest): Promise<NextResponse> => {
   try {
     return NextResponse.json(
       createSuccessResponse({ message: "Hello, world!" })
