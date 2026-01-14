@@ -34,6 +34,7 @@ const POST = async (request: NextRequest): Promise<Response> => {
       })
     );
   } catch (error) {
+    console.error("Error in POST /api/combos:", error);
     return NextResponse.json(
       createErrorResponse(
         error instanceof Error ? error.message : "An error occurred in route: POST /api/combos."

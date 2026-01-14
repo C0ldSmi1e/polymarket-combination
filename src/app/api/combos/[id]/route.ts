@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSuccessResponse, createErrorResponse } from "@/src/utils/api-helpers";
-
+import { ComboFormSchema } from "@/src/schemas/combo";
 import { getCombo, updateCombo, deleteCombo } from "@/src/actions/server/combos";
 
-const GET = async (request: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<Response> => {
+const GET = async (_request: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<Response> => {
   try {
     const resolvedParams = await params;
     const comboId = parseInt(resolvedParams.id, 10);
@@ -28,7 +28,11 @@ const PUT = async (request: NextRequest, { params }: { params: Promise<{ id: str
     const resolvedParams = await params;
     const comboId = parseInt(resolvedParams.id, 10);
     const requestData = await request.json();
-    const updatedCombo = await updateCombo(comboId, requestData);
+    const validationResult = ComboFormSchema.safeParse(requestData);
+    if (!validationResult.success) {
+      throw new Error("Invalid combo data");
+    }
+    const updatedCombo = await updateCombo(comboId, validationResult.data);
     return NextResponse.json(
       createSuccessResponse({
         message: "Combo updated successfully.",
@@ -44,7 +48,7 @@ const PUT = async (request: NextRequest, { params }: { params: Promise<{ id: str
   }
 };
 
-const DELETE = async (request: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<Response> => {
+const DELETE = async (_request: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<Response> => {
   try {
     const resolvedParams = await params;
     const comboId = parseInt(resolvedParams.id, 10);
