@@ -1,8 +1,7 @@
-import List from '@/src/components/combo/list';
-import { useQueryClient } from '@tanstack/react-query';
+import List from "@/src/app/(admin)/components/combo/list";
 
 const CombosPage = () => {
-  return <div><List /></div>;
+  return <List />;
 };
 
 export default CombosPage;

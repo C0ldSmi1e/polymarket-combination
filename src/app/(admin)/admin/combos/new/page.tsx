@@ -1,4 +1,4 @@
-import Form from "@/src/components/combo/form";
+import Form from "@/src/app/(admin)/components/combo/form";
 
 const NewComboPage = () => {
   return (
