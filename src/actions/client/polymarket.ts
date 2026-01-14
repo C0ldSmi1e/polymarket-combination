@@ -21,15 +21,7 @@ const transformMarket = (raw: any): Market => ({
 
 const getMarketsByEventSlug = async (eventSlug: string): Promise<Market[]> => {
   const response = await fetch(
-    `https://gamma-api.polymarket.com/events/slug/${encodeURIComponent(
-      eventSlug
-    )}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    }
+    `/api/polymarket/events/${encodeURIComponent(eventSlug)}`
   );
 
   if (!response.ok) {
@@ -38,8 +30,13 @@ const getMarketsByEventSlug = async (eventSlug: string): Promise<Market[]> => {
     );
   }
 
-  const data = await response.json();
-  const rawMarkets = data.markets ?? [];
+  const { data, error } = await response.json();
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  const rawMarkets = data.event?.markets ?? [];
 
   return rawMarkets.map(transformMarket);
 };
