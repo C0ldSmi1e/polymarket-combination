@@ -35,7 +35,7 @@ const Form = ({ combo } : { combo?: Combo }) => {
       const newCombo = await (combo ? updateCombo(combo.id, formData) : createCombo(formData));
       toast.success(combo ? "Combo updated successfully" : "Combo created successfully");
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      router.push(`/admin/thoughts/${newCombo.id}`);
+      router.push(`/admin/combos/${newCombo.id}`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "An error occurred");
     } finally {
