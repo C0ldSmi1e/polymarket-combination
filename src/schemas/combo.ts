@@ -1,4 +1,6 @@
+import { create } from "domain";
 import { z } from "zod";
+import { id } from "zod/locales";
 
 const ComboSchema = z.object({
   id: z.number(),
@@ -10,12 +12,20 @@ const ComboSchema = z.object({
   isActive: z.boolean(),
 });
 
+const ComboFormSchema = ComboSchema.omit({
+  id: true,
+  createdAt: true,
+});
+
 const ComboEvent = z.object({
+  id: z.number(),
+  createdAt: z.number(),
   comboId: z.number(),
   eventSlug: z.string(),
 });
 
 export type Combo = z.infer<typeof ComboSchema>;
 export type ComboEvent = z.infer<typeof ComboEvent>;
+export type ComboForm = z.infer<typeof ComboFormSchema>;
 
-export { ComboSchema, ComboEvent };
+export { ComboSchema, ComboEvent, ComboFormSchema };
