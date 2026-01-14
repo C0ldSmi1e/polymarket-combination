@@ -14,17 +14,17 @@ const ComboList = () => {
   const activeCombos = combos?.filter((combo) => combo.isActive) ?? [];
 
   if (isLoading) {
-    return <div style={{ padding: 20 }}>Loading combos...</div>;
+    return <div className="p-5">Loading combos...</div>;
   }
 
   if (activeCombos.length === 0) {
-    return <div style={{ padding: 20 }}>No active combos available.</div>;
+    return <div className="p-5">No active combos available.</div>;
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2 style={{ marginBottom: 16 }}>Active Combos</h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <div className="p-5">
+      <h2 className="text-xl font-semibold mb-4">Active Combos</h2>
+      <div className="flex flex-col gap-4">
         {activeCombos.map((combo) => (
           <ComboItem key={combo.id} combo={combo} />
         ))}

@@ -70,9 +70,9 @@ const Form = ({ combo }: { combo?: ComboWithEvents }) => {
   };
 
   return (
-    <form onSubmit={onSubmit} style={{ maxWidth: 500 }}>
-      <div style={{ marginBottom: 16 }}>
-        <label htmlFor="name" style={{ display: "block", marginBottom: 4 }}>
+    <form onSubmit={onSubmit} className="max-w-md">
+      <div className="mb-4">
+        <label htmlFor="name" className="block mb-1">
           Name *
         </label>
         <input
@@ -81,20 +81,12 @@ const Form = ({ combo }: { combo?: ComboWithEvents }) => {
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           maxLength={100}
-          style={{
-            width: "100%",
-            padding: 8,
-            border: "1px solid #ccc",
-            borderRadius: 4,
-          }}
+          className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
 
-      <div style={{ marginBottom: 16 }}>
-        <label
-          htmlFor="description"
-          style={{ display: "block", marginBottom: 4 }}
-        >
+      <div className="mb-4">
+        <label htmlFor="description" className="block mb-1">
           Description
         </label>
         <textarea
@@ -105,17 +97,12 @@ const Form = ({ combo }: { combo?: ComboWithEvents }) => {
           }
           maxLength={500}
           rows={4}
-          style={{
-            width: "100%",
-            padding: 8,
-            border: "1px solid #ccc",
-            borderRadius: 4,
-          }}
+          className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
 
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <div className="mb-4">
+        <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={formData.isActive}
@@ -127,9 +114,9 @@ const Form = ({ combo }: { combo?: ComboWithEvents }) => {
         </label>
       </div>
 
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ display: "block", marginBottom: 4 }}>Event Slugs</label>
-        <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+      <div className="mb-4">
+        <label className="block mb-1">Event Slugs</label>
+        <div className="flex gap-2 mb-2">
           <input
             type="text"
             value={newSlug}
@@ -141,53 +128,28 @@ const Form = ({ combo }: { combo?: ComboWithEvents }) => {
                 addEventSlug();
               }
             }}
-            style={{
-              flex: 1,
-              padding: 8,
-              border: "1px solid #ccc",
-              borderRadius: 4,
-            }}
+            className="flex-1 p-2 border border-gray-300 rounded"
           />
           <button
             type="button"
             onClick={addEventSlug}
-            style={{
-              padding: "8px 16px",
-              border: "1px solid #ccc",
-              borderRadius: 4,
-              cursor: "pointer",
-            }}
+            className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
           >
             Add
           </button>
         </div>
         {formData.eventSlugs.length > 0 && (
-          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+          <ul className="space-y-1">
             {formData.eventSlugs.map((slug) => (
               <li
                 key={slug}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: 8,
-                  border: "1px solid #eee",
-                  borderRadius: 4,
-                  marginBottom: 4,
-                }}
+                className="flex justify-between items-center p-2 border border-gray-200 rounded"
               >
                 <span>{slug}</span>
                 <button
                   type="button"
                   onClick={() => removeEventSlug(slug)}
-                  style={{
-                    padding: "4px 8px",
-                    border: "none",
-                    background: "#ff4444",
-                    color: "white",
-                    borderRadius: 4,
-                    cursor: "pointer",
-                  }}
+                  className="px-2 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
                 >
                   Remove
                 </button>
@@ -197,18 +159,15 @@ const Form = ({ combo }: { combo?: ComboWithEvents }) => {
         )}
       </div>
 
-      <div style={{ display: "flex", gap: 8 }}>
+      <div className="flex gap-2">
         <button
           type="submit"
           disabled={isSubmitting}
-          style={{
-            padding: "8px 16px",
-            border: "none",
-            background: isSubmitting ? "#ccc" : "#0070f3",
-            color: "white",
-            borderRadius: 4,
-            cursor: isSubmitting ? "not-allowed" : "pointer",
-          }}
+          className={`px-4 py-2 text-white rounded ${
+            isSubmitting
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
           {isSubmitting ? "Saving..." : combo ? "Update" : "Create"}
         </button>
@@ -216,13 +175,7 @@ const Form = ({ combo }: { combo?: ComboWithEvents }) => {
           type="button"
           onClick={onCancel}
           disabled={isSubmitting}
-          style={{
-            padding: "8px 16px",
-            border: "1px solid #ccc",
-            background: "white",
-            borderRadius: 4,
-            cursor: isSubmitting ? "not-allowed" : "pointer",
-          }}
+          className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 disabled:cursor-not-allowed"
         >
           Cancel
         </button>

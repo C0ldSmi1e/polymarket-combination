@@ -2,10 +2,10 @@ import ComboList from "@/src/app/(site)/components/combos/list";
 
 const Home = () => {
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto" }}>
-      <header style={{ padding: 20, borderBottom: "1px solid #eee" }}>
-        <h1 style={{ margin: 0 }}>Polymarket Combos</h1>
-        <p style={{ margin: "4px 0 0", color: "#666" }}>
+    <div className="max-w-3xl mx-auto">
+      <header className="p-5 border-b border-gray-200">
+        <h1 className="text-2xl font-bold">Polymarket Combos</h1>
+        <p className="mt-1 text-gray-600">
           Bet on combinations of prediction market events
         </p>
       </header>

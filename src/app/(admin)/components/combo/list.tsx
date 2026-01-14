@@ -12,25 +12,12 @@ const List = () => {
   });
 
   return (
-    <div style={{ padding: 20 }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 16,
-        }}
-      >
-        <h1>Combos</h1>
+    <div className="p-5">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Combos</h1>
         <Link
           href="/admin/combos/new"
-          style={{
-            padding: "8px 16px",
-            background: "#0070f3",
-            color: "white",
-            borderRadius: 4,
-            textDecoration: "none",
-          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           New Combo
         </Link>
@@ -39,43 +26,39 @@ const List = () => {
       {isLoading ? (
         <p>Loading...</p>
       ) : combos && combos.length > 0 ? (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table className="w-full border-collapse">
           <thead>
-            <tr style={{ borderBottom: "2px solid #eee", textAlign: "left" }}>
-              <th style={{ padding: 8 }}>ID</th>
-              <th style={{ padding: 8 }}>Name</th>
-              <th style={{ padding: 8 }}>Events</th>
-              <th style={{ padding: 8 }}>Status</th>
-              <th style={{ padding: 8 }}>Created</th>
+            <tr className="border-b-2 border-gray-200 text-left">
+              <th className="p-2">ID</th>
+              <th className="p-2">Name</th>
+              <th className="p-2">Events</th>
+              <th className="p-2">Status</th>
+              <th className="p-2">Created</th>
             </tr>
           </thead>
           <tbody>
             {combos.map((combo) => (
-              <tr key={combo.id} style={{ borderBottom: "1px solid #eee" }}>
-                <td style={{ padding: 8 }}>{combo.id}</td>
-                <td style={{ padding: 8 }}>
+              <tr key={combo.id} className="border-b border-gray-200">
+                <td className="p-2">{combo.id}</td>
+                <td className="p-2">
                   <Link
                     href={`/admin/combos/${combo.id}`}
-                    style={{ color: "#0070f3" }}
+                    className="text-blue-600 hover:underline"
                   >
                     {combo.name}
                   </Link>
                 </td>
-                <td style={{ padding: 8 }}>{combo.eventSlugs.length}</td>
-                <td style={{ padding: 8 }}>
+                <td className="p-2">{combo.eventSlugs.length}</td>
+                <td className="p-2">
                   <span
-                    style={{
-                      padding: "2px 8px",
-                      borderRadius: 4,
-                      background: combo.isActive ? "#22c55e" : "#ef4444",
-                      color: "white",
-                      fontSize: 12,
-                    }}
+                    className={`px-2 py-0.5 rounded text-xs text-white ${
+                      combo.isActive ? "bg-green-500" : "bg-red-500"
+                    }`}
                   >
                     {combo.isActive ? "Active" : "Inactive"}
                   </span>
                 </td>
-                <td style={{ padding: 8, fontSize: 14, color: "#666" }}>
+                <td className="p-2 text-sm text-gray-600">
                   {new Date(combo.createdAt).toLocaleDateString()}
                 </td>
               </tr>
